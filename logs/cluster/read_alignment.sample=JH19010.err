@@ -1,0 +1,20 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 8
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Oct  9 19:13:52 2021]
+rule read_alignment:
+    input: input_folder/datasets/raw_data/JH19010, /fs03/pg32/zarul/results/GRCh38_full_analysis_set_plus_decoy_hla.fa, /fs03/pg32/zarul/results/bwa_index
+    output: /fs03/pg32/zarul/results/read_alignment/JH19010
+    log: /fs03/pg32/zarul/results/log/read_alignment/JH19010.log
+    jobid: 0
+    wildcards: sample=JH19010
+    threads: 8
+    resources: mem_mb=6225, disk_mb=6225, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/ff944c3fd317023ffbdbe7a022133507
+[Sat Oct  9 19:54:53 2021]
+Finished job 0.
+1 of 1 steps (100%) done

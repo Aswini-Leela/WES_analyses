@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sun Oct 10 01:13:44 2021]
+rule funcotator:
+    input: /fs03/pg32/zarul/results/single_calling/filtervarianttranches/JH19037.vcf.gz, /fs03/pg32/zarul/results/single_calling/filtervarianttranches/JH19037.vcf.gz.tbi, /fs03/pg32/zarul/results/GRCh38_full_analysis_set_plus_decoy_hla.fa, /fs03/pg32/zarul_db/funcotator_db/funcotator_dataSources.v1.6.20190124g
+    output: /fs03/pg32/zarul/results/single_calling/funcotator/JH19037.vcf.gz, /fs03/pg32/zarul/results/single_calling/funcotator/JH19037.vcf.gz.tbi
+    log: /fs03/pg32/zarul/results/log/single_calling/funcotator/JH19037.log
+    jobid: 0
+    wildcards: sample=JH19037
+    resources: mem_mb=6228, disk_mb=6228, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/60b2de714ad41663a24ed17709833ece
+[Sun Oct 10 01:16:49 2021]
+Finished job 0.
+1 of 1 steps (100%) done

@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Mon Oct  4 02:06:38 2021]
+rule gatk_variantannotator:
+    input: /fs03/pg32/zarul/results/GRCh38_full_analysis_set_plus_decoy_hla.fa, /fs03/pg32/zarul/results/gatk_genotype/NA12878.vcf.gz, /fs03/pg32/zarul/results/marked_dup/NIST7035.sorted.bam, /fs03/pg32/zarul/results/marked_dup/NIST7086.sorted.bam, /fs03/ie79/db/gatk_bundle_db/Homo_sapiens_assembly38.dbsnp.vcf.gz
+    output: /fs03/pg32/zarul/results/gatk_variantannotator/NA12878.vcf.gz
+    log: /fs03/pg32/zarul/results/log/gatk_variantannotator/NA12878.log
+    jobid: 0
+    wildcards: group=NA12878
+    resources: mem_mb=33412, disk_mb=33412, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/073bb5cf103217382615e9dd257d2ae4
+[Mon Oct  4 02:16:24 2021]
+Finished job 0.
+1 of 1 steps (100%) done

@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Oct  9 19:51:33 2021]
+rule mark_duplicates:
+    input: /fs03/pg32/zarul/results/merge_bamfiles/PRS044.bam
+    output: /fs03/pg32/zarul/results/marked_dup/PRS044.bam, /fs03/pg32/zarul/results/marked_dup/PRS044.metrics.txt
+    log: /fs03/pg32/zarul/results/log/mark_duplicates/PRS044.log
+    jobid: 0
+    wildcards: sample=PRS044
+    resources: mem_mb=12094, disk_mb=12094, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/ff944c3fd317023ffbdbe7a022133507
+[Sat Oct  9 20:18:45 2021]
+Finished job 0.
+1 of 1 steps (100%) done

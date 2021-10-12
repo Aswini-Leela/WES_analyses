@@ -1,0 +1,87 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Oct  9 23:53:52 2021]
+rule cnnscorevariants:
+    input: /fs03/pg32/zarul/results/single_calling/genotype_gvcf/JH19031.vcf.gz, /fs03/pg32/zarul/results/single_calling/genotype_gvcf/JH19031.vcf.gz.tbi, /fs03/pg32/zarul/results/preprocessing/gatk_applybqsr/JH19031_recal.bam, /fs03/pg32/zarul/results/preprocessing/gatk_applybqsr/JH19031_recal.bai, /fs03/pg32/zarul/results/GRCh38_full_analysis_set_plus_decoy_hla.fa
+    output: /fs03/pg32/zarul/results/single_calling/cnnscorevariants/JH19031.vcf.gz, /fs03/pg32/zarul/results/single_calling/cnnscorevariants/JH19031.vcf.gz.tbi, /fs03/pg32/zarul/results/single_calling/cnnscorevariants/.temp_JH19031
+    log: /fs03/pg32/zarul/results/log/single_calling/cnnscorevariants/JH19031.log
+    jobid: 0
+    wildcards: sample=JH19031
+    resources: mem_mb=50000, disk_mb=24585, tmpdir=/tmp
+
+Activating singularity image /projects/pg32/WES_preliminary_analyses/.snakemake/singularity/c25fcccac22093779d3bc7c101442daf.simg
+INFO:    Converting SIF file to temporary sandbox...
+12:54:18.093 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/gatk/gatk-package-4.1.3.0-local.jar!/com/intel/gkl/native/libgkl_compression.so
+12:54:18.542 INFO  CNNScoreVariants - ------------------------------------------------------------
+12:54:18.543 INFO  CNNScoreVariants - The Genome Analysis Toolkit (GATK) v4.1.3.0
+12:54:18.543 INFO  CNNScoreVariants - For support and documentation go to https://software.broadinstitute.org/gatk/
+12:54:18.543 INFO  CNNScoreVariants - Executing as mzar0002@m3j008 on Linux v3.10.0-1160.11.1.el7.x86_64 amd64
+12:54:18.543 INFO  CNNScoreVariants - Java runtime: OpenJDK 64-Bit Server VM v1.8.0_191-8u191-b12-0ubuntu0.16.04.1-b12
+12:54:18.543 INFO  CNNScoreVariants - Start Date/Time: October 9, 2021 12:54:18 PM UTC
+12:54:18.543 INFO  CNNScoreVariants - ------------------------------------------------------------
+12:54:18.543 INFO  CNNScoreVariants - ------------------------------------------------------------
+12:54:18.544 INFO  CNNScoreVariants - HTSJDK Version: 2.20.1
+12:54:18.544 INFO  CNNScoreVariants - Picard Version: 2.20.5
+12:54:18.544 INFO  CNNScoreVariants - HTSJDK Defaults.COMPRESSION_LEVEL : 2
+12:54:18.544 INFO  CNNScoreVariants - HTSJDK Defaults.USE_ASYNC_IO_READ_FOR_SAMTOOLS : false
+12:54:18.544 INFO  CNNScoreVariants - HTSJDK Defaults.USE_ASYNC_IO_WRITE_FOR_SAMTOOLS : true
+12:54:18.544 INFO  CNNScoreVariants - HTSJDK Defaults.USE_ASYNC_IO_WRITE_FOR_TRIBBLE : false
+12:54:18.544 INFO  CNNScoreVariants - Deflater: IntelDeflater
+12:54:18.544 INFO  CNNScoreVariants - Inflater: IntelInflater
+12:54:18.544 INFO  CNNScoreVariants - GCS max retries/reopens: 20
+12:54:18.544 INFO  CNNScoreVariants - Requester pays: disabled
+12:54:18.544 INFO  CNNScoreVariants - Initializing engine
+12:54:19.398 INFO  FeatureManager - Using codec VCFCodec to read file file:///fs03/pg32/zarul/results/single_calling/genotype_gvcf/JH19031.vcf.gz
+12:54:19.720 INFO  CNNScoreVariants - Done initializing engine
+12:54:19.721 INFO  NativeLibraryLoader - Loading libgkl_utils.so from jar:file:/gatk/gatk-package-4.1.3.0-local.jar!/com/intel/gkl/native/libgkl_utils.so
+12:54:21.965 INFO  CNNScoreVariants - Using key:CNN_2D for CNN architecture:/tmp/small_2d.8147562996604382975.json and weights:/tmp/small_2d.8373451396599671624.hd5
+12:54:22.684 INFO  ProgressMeter - Starting traversal
+12:54:22.685 INFO  ProgressMeter -        Current Locus  Elapsed Minutes    Variants Processed  Variants/Minute
+12:54:22.689 INFO  CNNScoreVariants - Starting pass 0 through the variants
+12:54:32.825 INFO  ProgressMeter -       chr1:102888582              0.2                  1000           5939.4
+12:55:07.501 WARN  CNNScoreVariants - No reads at contig:chr1 site:152213341
+12:55:07.503 WARN  CNNScoreVariants - No reads at contig:chr1 site:152213347
+12:55:48.790 INFO  ProgressMeter -       chr1:228340862              1.4                  2000           1393.6
+12:56:59.308 INFO  ProgressMeter -       chr2:159230143              2.6                  3000           1149.3
+12:58:07.241 INFO  ProgressMeter -        chr3:48632014              3.7                  4000           1068.8
+12:59:15.687 INFO  ProgressMeter -        chr4:38797314              4.9                  5000           1023.9
+13:00:23.750 INFO  ProgressMeter -       chr5:123090137              6.0                  6000            997.1
+13:01:30.076 INFO  ProgressMeter -        chr6:57046776              7.1                  7000            982.7
+13:02:38.830 INFO  ProgressMeter -        chr7:90310113              8.3                  8000            967.5
+13:03:52.780 INFO  ProgressMeter -        chr8:70052164              9.5                  9000            947.2
+13:05:01.539 INFO  ProgressMeter -       chr9:124856497             10.6                 10000            939.2
+13:06:10.890 INFO  ProgressMeter -      chr10:113679810             11.8                 11000            931.9
+13:07:19.899 INFO  ProgressMeter -       chr11:65047678             13.0                 12000            926.4
+13:08:29.914 INFO  ProgressMeter -       chr12:52651842             14.1                 13000            920.6
+13:09:37.998 INFO  ProgressMeter -       chr14:20384658             15.3                 14000            917.7
+13:10:50.410 INFO  ProgressMeter -       chr15:64943580             16.5                 15000            911.2
+13:12:00.762 INFO  ProgressMeter -       chr16:70481452             17.6                 16000            907.3
+13:13:12.775 INFO  ProgressMeter -       chr17:44399041             18.8                 17000            902.6
+13:14:23.637 INFO  ProgressMeter -        chr19:2337469             20.0                 18000            899.3
+13:15:34.597 INFO  ProgressMeter -       chr19:44647342             21.2                 19000            896.3
+13:16:46.354 INFO  ProgressMeter -       chr20:63567333             22.4                 20000            893.1
+13:17:57.185 INFO  ProgressMeter -       chrX:145823364             23.6                 21000            890.8
+13:17:57.668 INFO  CNNScoreVariants - Finished pass 0 through the variants
+13:18:32.656 INFO  CNNScoreVariants - Starting pass 1 through the variants
+13:18:32.818 INFO  ProgressMeter -        chr1:91962938             24.2                 22000            910.3
+13:18:33.603 INFO  CNNScoreVariants - Finished pass 1 through the variants
+13:18:33.603 INFO  CNNScoreVariants - No variants filtered by: AllowAllVariantsVariantFilter
+13:18:33.655 INFO  CNNScoreVariants - No reads filtered by: (WellformedReadFilter AND ReadGroupBlackListReadFilter)
+13:18:33.655 INFO  ProgressMeter -       chrX:118974822             24.2                 42088           1740.4
+13:18:33.655 INFO  ProgressMeter - Traversal complete. Processed 42088 total variants in 24.2 minutes.
+13:18:33.655 INFO  CNNScoreVariants - Done scoring variants with CNN.
+13:18:33.786 INFO  CNNScoreVariants - Shutting down engine
+[October 9, 2021 1:18:33 PM UTC] org.broadinstitute.hellbender.tools.walkers.vqsr.CNNScoreVariants done. Elapsed time: 24.26 minutes.
+Runtime.totalMemory()=2076049408
+Using GATK jar /gatk/gatk-package-4.1.3.0-local.jar
+Running:
+    java -Dsamjdk.use_async_io_read_samtools=false -Dsamjdk.use_async_io_write_samtools=true -Dsamjdk.use_async_io_write_tribble=false -Dsamjdk.compression_level=2 -Xmx50G -jar /gatk/gatk-package-4.1.3.0-local.jar CNNScoreVariants -I /fs03/pg32/zarul/results/preprocessing/gatk_applybqsr/JH19031_recal.bam -V /fs03/pg32/zarul/results/single_calling/genotype_gvcf/JH19031.vcf.gz -R /fs03/pg32/zarul/results/GRCh38_full_analysis_set_plus_decoy_hla.fa -O /fs03/pg32/zarul/results/single_calling/cnnscorevariants/JH19031.vcf.gz -tensor-type read_tensor
+INFO:    Cleaning up image...
+Touching output file /fs03/pg32/zarul/results/single_calling/cnnscorevariants/.temp_JH19031.
+[Sun Oct 10 00:18:37 2021]
+Finished job 0.
+1 of 1 steps (100%) done

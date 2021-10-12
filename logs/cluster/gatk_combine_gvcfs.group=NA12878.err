@@ -1,0 +1,3 @@
+AttributeError in line 23 of /projects/pg32/WES_preliminary_analyses/Snakefile:
+'Rules' object has no attribute 'gatk_applyVQSR_indel'
+  File "/projects/pg32/WES_preliminary_analyses/Snakefile", line 23, in <module>

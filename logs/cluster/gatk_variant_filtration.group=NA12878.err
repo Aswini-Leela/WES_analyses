@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Wed Sep 22 17:03:39 2021]
+rule gatk_variant_filtration:
+    input: /fs03/ie79/WES_prelim_swap/results/gatk_genotype/NA12878.vcf.gz
+    output: /fs03/ie79/WES_prelim_swap/results/gatk_variant_filtration/NA12878.varfilter.vcf.gz
+    log: results/log/gatk_filter_variant_filtration/NA12878.log
+    jobid: 0
+    wildcards: group=NA12878
+    resources: mem_mb=1000, disk_mb=1000, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/073bb5cf103217382615e9dd257d2ae4
+[Wed Sep 22 17:03:52 2021]
+Finished job 0.
+1 of 1 steps (100%) done

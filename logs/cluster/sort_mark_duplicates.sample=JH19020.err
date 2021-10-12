@@ -1,0 +1,54 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Oct  9 19:37:35 2021]
+rule sort_mark_duplicates:
+    input: /fs03/pg32/zarul/results/marked_dup/JH19020.bam
+    output: /fs03/pg32/zarul/results/marked_dup/JH19020.sorted.bam, /fs03/pg32/zarul/results/marked_dup/JH19020.sorted.bai
+    jobid: 0
+    wildcards: sample=JH19020
+    resources: mem_mb=9122, disk_mb=9122, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/ff944c3fd317023ffbdbe7a022133507
+INFO	2021-10-09 19:37:41	SortSam	
+
+********** NOTE: Picard's command line syntax is changing.
+**********
+********** For more information, please see:
+********** https://github.com/broadinstitute/picard/wiki/Command-Line-Syntax-Transition-For-Users-(Pre-Transition)
+**********
+********** The command line looks like this in the new syntax:
+**********
+**********    SortSam -I /fs03/pg32/zarul/results/marked_dup/JH19020.bam -O /fs03/pg32/zarul/results/marked_dup/JH19020.sorted.bam -SORT_ORDER coordinate -CREATE_INDEX true
+**********
+
+
+19:37:42.276 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/projects/pg32/WES_preliminary_analyses/.snakemake/conda/ff944c3fd317023ffbdbe7a022133507/share/picard-2.26.1-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+[Sat Oct 09 19:37:42 AEDT 2021] SortSam INPUT=/fs03/pg32/zarul/results/marked_dup/JH19020.bam OUTPUT=/fs03/pg32/zarul/results/marked_dup/JH19020.sorted.bam SORT_ORDER=coordinate CREATE_INDEX=true    VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json USE_JDK_DEFLATER=false USE_JDK_INFLATER=false
+[Sat Oct 09 19:37:42 AEDT 2021] Executing as mzar0002@m3i015 on Linux 3.10.0-1160.11.1.el7.x86_64 amd64; OpenJDK 64-Bit Server VM 11.0.9.1-internal+0-adhoc..src; Deflater: Intel; Inflater: Intel; Provider GCS is not available; Picard version: 2.26.1
+WARNING: BAM index file /fs03/pg32/zarul/results/marked_dup/JH19020.bai is older than BAM /fs03/pg32/zarul/results/marked_dup/JH19020.bam
+INFO	2021-10-09 19:38:45	SortSam	Read    10,000,000 records.  Elapsed time: 00:01:03s.  Time for last 10,000,000:   63s.  Last read position: chr2:84,708,457
+INFO	2021-10-09 19:39:43	SortSam	Read    20,000,000 records.  Elapsed time: 00:02:00s.  Time for last 10,000,000:   57s.  Last read position: chr4:86,064,180
+INFO	2021-10-09 19:40:38	SortSam	Read    30,000,000 records.  Elapsed time: 00:02:56s.  Time for last 10,000,000:   55s.  Last read position: chr7:76,064,453
+INFO	2021-10-09 19:41:40	SortSam	Read    40,000,000 records.  Elapsed time: 00:03:57s.  Time for last 10,000,000:   61s.  Last read position: chr10:71,724,017
+INFO	2021-10-09 19:42:33	SortSam	Read    50,000,000 records.  Elapsed time: 00:04:50s.  Time for last 10,000,000:   53s.  Last read position: chr12:120,327,598
+INFO	2021-10-09 19:43:36	SortSam	Read    60,000,000 records.  Elapsed time: 00:05:53s.  Time for last 10,000,000:   63s.  Last read position: chr16:57,137,332
+INFO	2021-10-09 19:44:30	SortSam	Read    70,000,000 records.  Elapsed time: 00:06:47s.  Time for last 10,000,000:   53s.  Last read position: chr19:35,352,080
+INFO	2021-10-09 19:45:25	SortSam	Read    80,000,000 records.  Elapsed time: 00:07:43s.  Time for last 10,000,000:   55s.  Last read position: chrX:108,126,162
+INFO	2021-10-09 19:45:49	SortSam	Finished reading inputs, merging and writing to output now.
+INFO	2021-10-09 19:47:11	SortSam	Wrote    10,000,000 records from a sorting collection.  Elapsed time: 00:09:28s.  Time for last 10,000,000:   80s.  Last read position: chr2:84,708,457
+INFO	2021-10-09 19:48:30	SortSam	Wrote    20,000,000 records from a sorting collection.  Elapsed time: 00:10:48s.  Time for last 10,000,000:   79s.  Last read position: chr4:86,064,180
+INFO	2021-10-09 19:49:51	SortSam	Wrote    30,000,000 records from a sorting collection.  Elapsed time: 00:12:09s.  Time for last 10,000,000:   81s.  Last read position: chr7:76,064,453
+INFO	2021-10-09 19:51:12	SortSam	Wrote    40,000,000 records from a sorting collection.  Elapsed time: 00:13:29s.  Time for last 10,000,000:   80s.  Last read position: chr10:71,724,017
+INFO	2021-10-09 19:52:30	SortSam	Wrote    50,000,000 records from a sorting collection.  Elapsed time: 00:14:48s.  Time for last 10,000,000:   78s.  Last read position: chr12:120,327,598
+INFO	2021-10-09 19:53:50	SortSam	Wrote    60,000,000 records from a sorting collection.  Elapsed time: 00:16:08s.  Time for last 10,000,000:   79s.  Last read position: chr16:57,137,332
+INFO	2021-10-09 19:55:08	SortSam	Wrote    70,000,000 records from a sorting collection.  Elapsed time: 00:17:25s.  Time for last 10,000,000:   77s.  Last read position: chr19:35,352,080
+INFO	2021-10-09 19:56:26	SortSam	Wrote    80,000,000 records from a sorting collection.  Elapsed time: 00:18:43s.  Time for last 10,000,000:   77s.  Last read position: chrX:108,126,162
+[Sat Oct 09 19:56:59 AEDT 2021] picard.sam.SortSam done. Elapsed time: 19.29 minutes.
+Runtime.totalMemory()=1183473664
+[Sat Oct  9 19:56:59 2021]
+Finished job 0.
+1 of 1 steps (100%) done

@@ -1,0 +1,19 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Sat Oct  9 23:21:02 2021]
+rule filtervarianttranches:
+    input: /fs03/pg32/zarul/results/single_calling/cnnscorevariants/NIST7086.vcf.gz, /fs03/pg32/zarul/results/single_calling/cnnscorevariants/NIST7086.vcf.gz.tbi, /fs03/ie79/db/gatk_bundle_db/hapmap_3.3.hg38.vcf.gz, /fs03/ie79/db/gatk_bundle_db/Mills_and_1000G_gold_standard.indels.hg38.vcf.gz
+    output: /fs03/pg32/zarul/results/single_calling/filtervarianttranches/NIST7086.vcf.gz, /fs03/pg32/zarul/results/single_calling/filtervarianttranches/NIST7086.vcf.gz.tbi
+    log: /fs03/pg32/zarul/results/log/single_calling/filtervarianttranches/NIST7086.log
+    jobid: 0
+    wildcards: sample=NIST7086
+    resources: mem_mb=1000, disk_mb=1000, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_preliminary_analyses/.snakemake/conda/60b2de714ad41663a24ed17709833ece
+[Sat Oct  9 23:21:18 2021]
+Finished job 0.
+1 of 1 steps (100%) done
