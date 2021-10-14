@@ -14,11 +14,11 @@ rule gatk_combine_gvcfs:
 		"""
 		gvcfs=$(for i in {input.gvcfs} ; do echo "-V "$i ; done | tr "\n" " ")
 
-		gatk CombineGVCFs \
+		gatk CombineGVCFs 
 		        -R {input.ref} \
 				$gvcfs \
-		        -L {input.exon_bed} \
-		        -O {output.vcf} 2> {log}
+		        -O {output.vcf} \
+				-L {input.exon_bed} 2> {log}
 		"""
 
 rule gatk_genotype_combined_gvcf:
@@ -38,14 +38,15 @@ rule gatk_genotype_combined_gvcf:
 		gatk GenotypeGVCFs \
 		        -R {input.ref} \
 				-V {input.gvcf} \
-		        -L {input.exon_bed} \
-		        -O {output.vcf} 2> {log}
+		        -O {output.vcf} \
+				-L {input.exon_bed} 2> {log}
 		"""
 			
 rule gatk_selectvariants_snp:
 	input:
 		vcf = rules.gatk_genotype_combined_gvcf.output,
 		ref = rules.download_reference_genome.output,
+		exon_bed = config["exon_bed"]
 	output:
 		vcf = os.path.join(out_path, "gatk_selectvariants_snp/{group}.vcf.gz"),
 		idx = os.path.join(out_path, "gatk_selectvariants_snp/{group}.vcf.gz.tbi")
@@ -60,20 +61,23 @@ rule gatk_selectvariants_snp:
 		gatk SelectVariants \
 		        -R {input.ref} \
 				-V {input.vcf} \
-				--select-type-to-include {params.select_type_to_include} \
-		        -O {output.vcf} 2> {log}
+				-O {output.vcf} \
+				-L {input.exon_bed} \
+				--select-type-to-include {params.select_type_to_include} 2> {log}
 		"""
 
 rule gatk_variant_recalibrator_snp:
 	input:
+		ref = rules.download_reference_genome.output,
 		vcf = rules.gatk_selectvariants_snp.output,
+		exon_bed = config["exon_bed"],
 		resource1 = config["hapmap_resource"],
 		resource2 = config["omni_resource"],
 		resource3 = config["1000G_resource"],
 		resource4 = config["dbsnp_resource"]
 	output:
-		recal = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.recal"),
-		tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.tranches")
+		recal = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.recal"),
+		tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.tranches")
 	conda:
 		"../envs/gatk.yaml"
 	log:
@@ -81,16 +85,16 @@ rule gatk_variant_recalibrator_snp:
 	resources:
 		mem_mb = 50000
 	params:
-		java_options = "-Xmx50G",
+		java_options = "-DGATK_STACKTRACE_ON_USER_EXCEPTION=true -Xmx50G",
 		tranches = " 100.0 99.95 99.9 99.8 99.6 99.5 99.4 99.3 99.0 98.0 97.0 90.0",
-		annots = " QD MQRankSum ReadPosRankSum FS MQ SOR DP",
+		annots = " QD FS SOR MQRankSum ReadPosRankSum MQ",
 		mode = "SNP",
 		max_gaussians = 4,
 		max_attempts = 5,
 		resource1 = "hapmap,known=false,training=true,truth=true,prior=15",
-		resource2 = "omni,known=false,training=true,truth=true,prior=12",
+		resource2 = "omni,known=false,training=true,truth=false,prior=12",
 		resource3 = "1000G,known=false,training=true,truth=false,prior=10",
-		resource4 = "dbsnp,known=true,training=false,truth=false,prior=7"
+		resource4 = "dbsnp,known=true,training=false,truth=false,prior=2"
 	shell:
 		"""
 		tranches=$(echo {params.tranches} | sed "s/ / -tranche /g" | sed "s/^/ -tranche /")
@@ -98,26 +102,27 @@ rule gatk_variant_recalibrator_snp:
 
 		gatk VariantRecalibrator \
 			--java-options \"{params.java_options}\" \
+			-R {input.ref} \
 			-V {input.vcf} \
-			--trust-all-polymorphic \
-			$tranches \
-			$annots \
-			--mode {params.mode} \
-			--max-attempts {params.max_attempts} \
-			--max-gaussians {params.max_gaussians} \
+			-O {output.recal} \
+			-L {input.exon_bed} \
 			--resource:{params.resource1} {input.resource1} \
 			--resource:{params.resource2} {input.resource2} \
 			--resource:{params.resource3} {input.resource3} \
 			--resource:{params.resource4} {input.resource4} \
-			-O {output.recal} \
+			$tranches \
+			$annots \
+			--mode {params.mode} \
 			--tranches-file {output.tranche_file} 2> {log}
 		"""
 
 rule gatk_applyVQSR_snp:
 	input:
+		ref = rules.download_reference_genome.output,
 		vcf = rules.gatk_genotype_combined_gvcf.output,
+		exon_bed = config["exon_bed"],
 		recal = rules.gatk_variant_recalibrator_snp.output.recal,
-		tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file,
+		tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file
 	output:
 		vcf = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz"),
 		idx = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz.tbi")
@@ -132,13 +137,15 @@ rule gatk_applyVQSR_snp:
 	shell:
 		"""
 		gatk ApplyVQSR \
+			-R {input.ref} \
 			-V {input.vcf} \
+			-O {output.vcf} \
+			-L {input.exon_bed} \
 			--recal-file {input.recal} \
 			--tranches-file {input.tranch} \
 			--truth-sensitivity-filter-level {params.truth_sensitivity_filter_level} \
 			--create-output-variant-index {params.create_output_variant_index} \
-			-mode {params.mode} \
-			-O {output.vcf}
+			-mode {params.mode}
 		"""
 
 rule gatk_selectvariants_indel:
@@ -159,13 +166,16 @@ rule gatk_selectvariants_indel:
 		gatk SelectVariants \
 		        -R {input.ref} \
 				-V {input.vcf} \
-				--select-type-to-include {params.select_type_to_include} \
-		        -O {output.vcf} 2> {log}
+		        -O {output.vcf} \
+				-L {input.exon_bed} \
+				--select-type-to-include {params.select_type_to_include} 2> {log}
 		"""
 
 rule gatk_variant_recalibrator_indel:
 	input:
+		ref = rules.download_reference_genome.output,
 		vcf = rules.gatk_selectvariants_indel.output,
+		exon_bed = config["exon_bed"],
 		resource1 = config["mills_resource"],
 		resource2 = config["axiompoly_resource"],
 		resource3 = config["dbsnp_resource"]
@@ -179,7 +189,7 @@ rule gatk_variant_recalibrator_indel:
 	params:
 		java_options = "-Xmx50G",
 		tranches = " 100.0 99.95 99.9 99.8 99.6 99.5 99.4 99.3 99.0 98.0 97.0 90.0",
-		annots = " QD MQRankSum ReadPosRankSum FS MQ SOR DP",
+		annots = " QD FS SOR MQ MQRankSum ReadPosRankSum",
 		mode = "INDEL",
 		max_attempts = 20,
 		resource1 = "mills,known=false,training=true,truth=true,prior=12",
@@ -189,13 +199,15 @@ rule gatk_variant_recalibrator_indel:
 		mem_mb = 50000
 	shell:
 		"""
-		tranches=$(echo {params.tranches} | sed "s/ / -tranche /g" | sed "s/^/ -tranche /")
-		annots=$(echo {params.annots} | sed "s/ / -an /g" | sed "s/^/ -an /")
+		tranches=$(for i in {params.tranches}; do echo " -tranche "$i ; done | tr "\n" " ")
+		annots=$(for i in {params.annots}; do echo " -an "$i ; done | tr "\n" " " )
 
 		gatk VariantRecalibrator \
 			--java-options \"{params.java_options}\" \
+			-R {input.ref} \
 			-V {input.vcf} \
-			--trust-all-polymorphic \
+			-O {output.recal} \
+			-L {input.exon_bed} \
 			$tranches \
 			$annots \
 			--mode {params.mode} \
@@ -203,7 +215,6 @@ rule gatk_variant_recalibrator_indel:
 			--resource:{params.resource1} {input.resource1} \
 			--resource:{params.resource2} {input.resource2} \
 			--resource:{params.resource3} {input.resource3} \
-			-O {output.recal} \
 			--tranches-file {output.tranche_file} 2> {log}
 		"""
 
