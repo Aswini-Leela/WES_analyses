@@ -2,12 +2,12 @@ rule build_index:
 	input:
 		rules.download_reference_genome.output
 	output:
-		bwa_index = directory(os.path.join(intermediate_path, "bwa_index")),
-		fasta_index = os.path.join(intermediate_path, "GRCh38_full_analysis_set_plus_decoy_hla.fa.fai")
+		bwa_index = directory(os.path.join(pre_path, "bwa_index")),
+		fasta_index = os.path.join(pre_path, "GRCh38_full_analysis_set_plus_decoy_hla.fa.fai")
 	conda:
 		"../envs/bwa.yaml"
 	log:
-		os.path.join(intermediate_path, "log/build_index.log")
+		os.path.join(pre_path, "log/build_index.log")
 	shell:
 		"""
 		mkdir -p {output.bwa_index}
@@ -20,11 +20,11 @@ rule create_picard_index_dictionary:
 	input:
 		rules.download_reference_genome.output
 	output:
-		os.path.join(intermediate_path, "GRCh38_full_analysis_set_plus_decoy_hla.dict")
+		os.path.join(pre_path, "GRCh38_full_analysis_set_plus_decoy_hla.dict")
 	conda:
 		"../envs/bwa.yaml"
 	log:
-		os.path.join(intermediate_path, "log/create_picard_index_dictionary.log")
+		os.path.join(pre_path, "log/create_picard_index_dictionary.log")
 	shell:
 		"""
 		picard CreateSequenceDictionary R={input} \
@@ -37,13 +37,13 @@ rule read_alignment:
 		ref_genome = rules.download_reference_genome.output,
 		ref_index = rules.build_index.output.bwa_index
 	output:
-		temp(directory(os.path.join(intermediate_path, "read_alignment/{sample}")))
+		temp(directory(os.path.join(pre_path, "read_alignment/{sample}")))
 	conda:
 		"../envs/bwa.yaml"
 	threads:
 		8
 	log:
-		os.path.join(intermediate_path, "log/read_alignment/{sample}.log")
+		os.path.join(pre_path, "log/read_alignment/{sample}.log")
 	shell:
 		"""
 		mkdir -p {output}
@@ -72,11 +72,11 @@ rule merge_bamfiles:
 	input:
 		rules.read_alignment.output
 	output:
-		temp(os.path.join(intermediate_path, "merge_bamfiles/{sample}.bam"))
+		temp(os.path.join(pre_path, "merge_bamfiles/{sample}.bam"))
 	conda:
 		"../envs/bwa.yaml"
 	log:
-		os.path.join(intermediate_path, "log/merge_bamfiles/{sample}.log")
+		os.path.join(pre_path, "log/merge_bamfiles/{sample}.log")
 	threads: 16
 	shell:
 		"""
@@ -87,13 +87,13 @@ rule mark_duplicates:
 	input:
 		rules.merge_bamfiles.output
 	output:
-		bam = temp(os.path.join(intermediate_path, "marked_dup/{sample}.bam")),
-		bai = temp(os.path.join(intermediate_path, "marked_dup/{sample}.bai")),
-		metrics = temp(os.path.join(intermediate_path, "marked_dup/{sample}.metrics.txt"))
+		bam = temp(os.path.join(pre_path, "marked_dup/{sample}.bam")),
+		bai = temp(os.path.join(pre_path, "marked_dup/{sample}.bai")),
+		metrics = temp(os.path.join(pre_path, "marked_dup/{sample}.metrics.txt"))
 	conda:
 		"../envs/bwa.yaml"
 	log:
-		os.path.join(intermediate_path, "log/mark_duplicates/{sample}.log")
+		os.path.join(pre_path, "log/mark_duplicates/{sample}.log")
 	params:
 		assume_sort_order = "coordinate",
 		validation_stringency = "SILENT",
@@ -115,8 +115,8 @@ rule sort_mark_duplicates:
 	input:
 		rules.mark_duplicates.output.bam
 	output:
-		bam = temp(os.path.join(intermediate_path, "marked_dup/{sample}.sorted.bam")),
-		bai = temp(os.path.join(intermediate_path, "marked_dup/{sample}.sorted.bai"))
+		bam = temp(os.path.join(pre_path, "marked_dup/{sample}.sorted.bam")),
+		bai = temp(os.path.join(pre_path, "marked_dup/{sample}.sorted.bai"))
 	conda:
 		"../envs/bwa.yaml"
 	params:

@@ -7,11 +7,11 @@ rule concordance_NA12878:
 		eval_vcf = rules.funcotator.output.vcf,
 		eval_idx = rules.funcotator.output.idx
 	output:
-		os.path.join(out_path, "single_calling/concordance_NA12878/{sample}.tsv")
+		os.path.join(out_path, "concordance_NA12878/{sample}.tsv")
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(out_path, "log/single_calling/concordance_NA12878/{sample}.log")
+		os.path.join(out_path, "log/concordance_NA12878/{sample}.log")
 	shell:
 		"""
 		gatk Concordance \

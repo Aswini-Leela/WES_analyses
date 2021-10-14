@@ -5,12 +5,12 @@ rule genotype_single_gvcf:
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = temp(os.path.join(intermediate_path, "single_calling/genotype_gvcf/{sample}.vcf.gz")),
-		idx = temp(os.path.join(intermediate_path, "single_calling/genotype_gvcf/{sample}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "genotype_gvcf/{sample}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "genotype_gvcf/{sample}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/single_calling/genotype_gvcf/{sample}.log")
+		os.path.join(out_path, "log/genotype_gvcf/{sample}.log")
 	shell:
 		"""
 		gatk GenotypeGVCFs \
@@ -27,13 +27,13 @@ rule cnnscorevariants:
 		bai = rules.gatk_applybqsr.output.bai,
 		ref = rules.download_reference_genome.output
 	output:
-		vcf = temp(os.path.join(intermediate_path, "single_calling/cnnscorevariants/{sample}.vcf.gz")),
-		idx = temp(os.path.join(intermediate_path, "single_calling/cnnscorevariants/{sample}.vcf.gz.tbi")),
-		_1 = touch(os.path.join(intermediate_path, "single_calling/cnnscorevariants/.temp_{sample}"))
+		vcf = temp(os.path.join(out_path, "cnnscorevariants/{sample}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "cnnscorevariants/{sample}.vcf.gz.tbi")),
+		_1 = touch(os.path.join(out_path, "cnnscorevariants/.temp_{sample}"))
 	container:
 		"docker://broadinstitute/gatk:4.1.3.0"
 	log:
-		os.path.join(intermediate_path, "log/single_calling/cnnscorevariants/{sample}.log")
+		os.path.join(out_path, "log/cnnscorevariants/{sample}.log")
 	resources:
 		mem_mb = 50000
 	params:
@@ -61,12 +61,12 @@ rule filtervarianttranches:
 		resource1 = config["hapmap_resource"],
 		resource2 = config["mills_resource"]
 	output:
-		vcf = temp(os.path.join(intermediate_path, "single_calling/filtervarianttranches/{sample}.vcf.gz")),
-		idx = temp(os.path.join(intermediate_path, "single_calling/filtervarianttranches/{sample}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "filtervarianttranches/{sample}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "filtervarianttranches/{sample}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/single_calling/filtervarianttranches/{sample}.log")
+		os.path.join(out_path, "log/filtervarianttranches/{sample}.log")
 	params:
 		info_key = "CNN_2D",
 		snp_tranche = " 99.9 99.95",
@@ -93,12 +93,12 @@ rule funcotator:
 		ref = rules.download_reference_genome.output,
 		data_sources = config["funcotator_resource"]
 	output:
-		vcf = os.path.join(intermediate_path, "single_calling/funcotator/{sample}.vcf.gz"),
-		idx = os.path.join(intermediate_path, "single_calling/funcotator/{sample}.vcf.gz.tbi")
+		vcf = os.path.join(out_path, "funcotator/{sample}.vcf.gz"),
+		idx = os.path.join(out_path, "funcotator/{sample}.vcf.gz.tbi")
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/single_calling/funcotator/{sample}.log")
+		os.path.join(out_path, "log/funcotator/{sample}.log")
 	params:
 		ref_version = "hg38",
 		out_file_format= "VCF"

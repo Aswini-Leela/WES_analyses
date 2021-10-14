@@ -1,6 +1,6 @@
 rule download_reference_genome:
 	output:
-		os.path.join(intermediate_path, "GRCh38_full_analysis_set_plus_decoy_hla.fa")
+		os.path.join(pre_path, "GRCh38_full_analysis_set_plus_decoy_hla.fa")
 	params:
 		url = config["reference_genome_url"]
 	shell:

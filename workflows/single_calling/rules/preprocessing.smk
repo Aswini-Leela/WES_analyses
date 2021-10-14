@@ -7,11 +7,11 @@ rule gatk_base_recalibrator:
 		dbsnp_ref = config["dbsnp_ref"],
 		exon_bed = config["exon_bed"]
 	output:
-		temp(os.path.join(intermediate_path, "preprocessing/gatk_recalibrator/{sample}_recaldata.table"))
+		temp(os.path.join(pre_path, "gatk_recalibrator/{sample}_recaldata.table"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/preprocessing/gatk_base_recalibrator/{sample}.log")
+		os.path.join(pre_path, "log/gatk_base_recalibrator/{sample}.log")
 	shell:
 		"""
 		gatk BaseRecalibrator \
@@ -29,12 +29,12 @@ rule gatk_applybqsr:
 		bam = rules.sort_mark_duplicates.output.bam,
 		bai = rules.sort_mark_duplicates.output.bai
 	output:
-		bam = temp(os.path.join(intermediate_path, "preprocessing/gatk_applybqsr/{sample}_recal.bam")),
-		bai = temp(os.path.join(intermediate_path, "preprocessing/gatk_applybqsr/{sample}_recal.bai"))
+		bam = temp(os.path.join(pre_path, "gatk_applybqsr/{sample}_recal.bam")),
+		bai = temp(os.path.join(pre_path, "gatk_applybqsr/{sample}_recal.bai"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/preprocessing/gatk_applybqsr/{sample}.log")
+		os.path.join(pre_path, "log/gatk_applybqsr/{sample}.log")
 	shell:
 		"""
 		gatk ApplyBQSR \
@@ -55,12 +55,12 @@ rule gatk_haplotypecaller:
 		dbsnp_ref = config["dbsnp_ref"],
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = os.path.join(intermediate_path, "preprocessing/gatk_haplotypecaller/{sample}_variants.g.vcf.gz"),
-		idx = os.path.join(intermediate_path, "preprocessing/gatk_haplotypecaller/{sample}_variants.g.vcf.gz.tbi")
+		vcf = os.path.join(pre_path, "gatk_haplotypecaller/{sample}_variants.g.vcf.gz"),
+		idx = os.path.join(pre_path, "gatk_haplotypecaller/{sample}_variants.g.vcf.gz.tbi")
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(intermediate_path, "log/preprocessing/gatk_haplotypecaller/{sample}.log")
+		os.path.join(pre_path, "log/gatk_haplotypecaller/{sample}.log")
 	params:
 		annotations = " QualByDepth",
 		erc = "GVCF"

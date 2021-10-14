@@ -4,12 +4,12 @@ rule gatk_combine_gvcfs:
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_combine/{group}.g.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_combine/{group}.g.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_combine/{group}.g.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_combine/{group}.g.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_combine_gvcfs/{group}.log")
+		os.path.join(out_path, "log/gatk_combine_gvcfs/{group}.log")
 	shell:
 		"""
 		gvcfs=$(for i in {input.gvcfs} ; do echo "-V "$i ; done | tr "\n" " ")
@@ -27,12 +27,12 @@ rule gatk_genotype_combined_gvcf:
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_genotype/{group}.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_genotype/{group}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_genotype/{group}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_genotype/{group}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_genotype_gvcf/{group}.log")
+		os.path.join(out_path, "log/gatk_genotype/{group}.log")
 	shell:
 		"""
 		gatk GenotypeGVCFs \
@@ -47,12 +47,12 @@ rule gatk_selectvariants_snp:
 		vcf = rules.gatk_genotype_combined_gvcf.output,
 		ref = rules.download_reference_genome.output,
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_selectvariants_snp/{group}.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_selectvariants_snp/{group}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_selectvariants_snp/{group}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_selectvariants_snp/{group}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_selectvariants_snp/{group}.log")
+		os.path.join(out_path, "log/gatk_selectvariants_snp/{group}.log")
 	params:
 		select_type_to_include = "SNP"
 	shell:
@@ -72,12 +72,12 @@ rule gatk_variant_recalibrator_snp:
 		resource3 = config["1000G_resource"],
 		resource4 = config["dbsnp_resource"]
 	output:
-		recal = temp(os.path.join(config["out_path"], "gatk_variant_recalibrator_snp/{group}.recal")),
-		tranche_file = temp(os.path.join(config["out_path"], "gatk_variant_recalibrator_snp/{group}.tranches"))
+		recal = temp(os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.recal")),
+		tranche_file = temp(os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.tranches"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_variant_recalibrator_snp/{group}.log")
+		os.path.join(out_path, "log/gatk_variant_recalibrator_snp/{group}.log")
 	resources:
 		mem_mb = 50000
 	params:
@@ -118,12 +118,12 @@ rule gatk_selectvariants_indel:
 		vcf = rules.gatk_genotype_combined_gvcf.output,
 		ref = rules.download_reference_genome.output,
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_selectvariants_indel/{group}.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_selectvariants_indel/{group}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_selectvariants_indel/{group}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_selectvariants_indel/{group}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_selectvariants_indel/{group}.log")
+		os.path.join(out_path, "log/gatk_selectvariants_indel/{group}.log")
 	params:
 		select_type_to_include = "INDEL"
 	shell:
@@ -142,12 +142,12 @@ rule gatk_variant_recalibrator_indel:
 		resource2 = config["axiompoly_resource"],
 		resource3 = config["dbsnp_resource"]
 	output:
-		recal = temp(os.path.join(config["out_path"], "gatk_variant_recalibrator_indel/{group}.recal")),
-		tranche_file = temp(os.path.join(config["out_path"], "gatk_variant_recalibrator_indel/{group}.tranches"))
+		recal = temp(os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.recal")),
+		tranche_file = temp(os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.tranches"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_variant_recalibrator_indel/{group}.log")
+		os.path.join(out_path, "log/gatk_variant_recalibrator_indel/{group}.log")
 	params:
 		java_options = "-Xmx50G",
 		tranches = " 100.0 99.95 99.9 99.8 99.6 99.5 99.4 99.3 99.0 98.0 97.0 90.0",
@@ -182,16 +182,16 @@ rule gatk_variant_recalibrator_indel:
 
 rule gatk_applyVQSR_indel:
 	input:
-		vcf = rules.gatk_genotype_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output,
 		recal = rules.gatk_variant_recalibrator_indel.output.recal,
 		tranch = rules.gatk_variant_recalibrator_indel.output.tranche_file,
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_VQSR_indel/{group}.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_VQSR_indel/{group}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_VQSR_indel/{group}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_VQSR_indel/{group}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_applyVQSR_indel/{group}.log")
+		os.path.join(out_path, "log/gatk_applyVQSR_indel/{group}.log")
 	params:
 		truth_sensitivity_filter_level = 99.7,
 		create_output_variant_index = "true",
@@ -210,16 +210,16 @@ rule gatk_applyVQSR_indel:
 
 rule gatk_applyVQSR_snp:
 	input:
-		vcf = rules.gatk_genotype_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output,
 		recal = rules.gatk_variant_recalibrator_snp.output.recal,
 		tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file,
 	output:
-		vcf = temp(os.path.join(config["out_path"], "gatk_VQSR_snp/{group}.vcf.gz")),
-		idx = temp(os.path.join(config["out_path"], "gatk_VQSR_snp/{group}.vcf.gz.tbi"))
+		vcf = temp(os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz")),
+		idx = temp(os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz.tbi"))
 	conda:
 		"../envs/gatk.yaml"
 	log:
-		os.path.join(config["out_path"], "log/gatk_applyVQSR_snp/{group}.log")
+		os.path.join(out_path, "log/gatk_applyVQSR_snp/{group}.log")
 	params:
 		truth_sensitivity_filter_level = 99.7,
 		create_output_variant_index = "true",

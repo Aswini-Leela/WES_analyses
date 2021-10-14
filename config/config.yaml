@@ -4,9 +4,9 @@ preprocessing_path:
     /fs03/pg32/zarul/WES_analysis/results/preprocessing
 out_path:
     single:
-        /fs03/pg32/zarul/WES_analysis/results/single_calling
+        /fs03/pg32/zarul/WES_analysis/single_calling/results
     joint:
-        /fs03/pg32/zarul/WES_analysis/results/joint_calling
+        /fs03/pg32/zarul/WES_analysis/joint_calling/results
 metadata:
     /projects/pg32/WES_analyses/input_folder/metadata.tsv
 fastq_dir_path:
@@ -32,6 +32,6 @@ omni_resource:
 1000G_resource:
     /fs03/ie79/db/gatk_bundle_db/1000G_phase1.snps.high_confidence.hg38.vcf.gz
 funcotator_resource:
-    /fs03/pg32/zarul_db/funcotator_db/funcotator_dataSources.v1.6.20190124g
+    /fs03/pg32/db/funcotator_db/funcotator_dataSources.v1.6.20190124g
 NA12878_validation_vcf:
     /projects/pg32/WES_analyses/input_folder/validation/HG001_GRCh38_1_22_v4.2.1_benchmark.vcf.gz

@@ -9,18 +9,18 @@ out_path = config["out_path"]["joint"]
 metadata = pd.read_csv(config["metadata"], sep = "\t", index_col = 0)
 samples = metadata.index.tolist()
 groups = metadata["group"].unique().tolist()
+groups = ["NA12878"]
 
 include: "rules/downloads.smk"
 include: "rules/bwa.smk"
 include: "rules/preprocessing.smk"
 include: "rules/gatk_joint_calling.smk"
-include: "rules/validate.smk"
+# include: "rules/validate.smk"
 
 rule all:
 	input:
-		expand(rules.gatk_haplotypecaller.output.vcf, sample = samples),
-		expand(rules.funcotator.output.vcf, sample = samples),
-		expand(rules.concordance_NA12878.output, sample = ["NIST7035", "NIST7086"])
+		expand(rules.gatk_applyVQSR_snp.output, group = groups),
+		expand(rules.gatk_applyVQSR_indel.output, group = groups)
 
 def get_samples_given_group(group):
 	return metadata.loc[metadata["group"] == group, :].index.tolist()
