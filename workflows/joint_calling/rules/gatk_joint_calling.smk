@@ -152,6 +152,7 @@ rule gatk_selectvariants_indel:
 	input:
 		vcf = rules.gatk_genotype_combined_gvcf.output,
 		ref = rules.download_reference_genome.output,
+		exon_bed = config["exon_bed"]
 	output:
 		vcf = os.path.join(out_path, "gatk_selectvariants_indel/{group}.vcf.gz"),
 		idx = os.path.join(out_path, "gatk_selectvariants_indel/{group}.vcf.gz.tbi")
@@ -220,7 +221,9 @@ rule gatk_variant_recalibrator_indel:
 
 rule gatk_applyVQSR_indel:
 	input:
+		ref = rules.download_reference_genome.output,
 		vcf = rules.gatk_genotype_combined_gvcf.output,
+		exon_bed = config["exon_bed"],
 		recal = rules.gatk_variant_recalibrator_indel.output.recal,
 		tranch = rules.gatk_variant_recalibrator_indel.output.tranche_file,
 	output:
@@ -237,12 +240,14 @@ rule gatk_applyVQSR_indel:
 	shell:
 		"""
 		gatk ApplyVQSR \
+			-R {input.ref} \
 			-V {input.vcf} \
+			-O {output.vcf} \
+			-L {input.exon_bed} \
 			--recal-file {input.recal} \
 			--tranches-file {input.tranch} \
 			--truth-sensitivity-filter-level {params.truth_sensitivity_filter_level} \
 			--create-output-variant-index {params.create_output_variant_index} \
 			-mode {params.mode}
-			-O {output.vcf}
 		"""
 
