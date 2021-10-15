@@ -1,0 +1,31 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 16
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Fri Oct 15 11:22:16 2021]
+rule merge_bamfiles:
+    input: /fs03/pg32/zarul/WES_analysis/results/preprocessing/read_alignment/NIST7035
+    output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam
+    log: /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/merge_bamfiles/NIST7035.log
+    jobid: 0
+    wildcards: sample=NIST7035
+    threads: 16
+    resources: mem_mb=1000, disk_mb=1000, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/4c26b92aaa87ccc6914a3a4813ed0717
+[Fri Oct 15 11:22:28 2021]
+Error in rule merge_bamfiles:
+    jobid: 0
+    output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam
+    log: /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/merge_bamfiles/NIST7035.log (check log file(s) for error message)
+    conda-env: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/4c26b92aaa87ccc6914a3a4813ed0717
+    shell:
+        
+		samtools merge -@ 16 -f -o /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam $(find /fs03/pg32/zarul/WES_analysis/results/preprocessing/read_alignment/NIST7035 | grep "bam$") 2> /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/merge_bamfiles/NIST7035.log
+		
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message

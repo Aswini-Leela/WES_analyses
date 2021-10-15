@@ -1,0 +1,36 @@
+Building DAG of jobs...
+Using shell: /bin/bash
+Provided cores: 1 (use --cores to define parallelism)
+Rules claiming more threads will be scaled down.
+Select jobs to execute...
+
+[Thu Oct 14 22:58:30 2021]
+rule create_picard_index_dictionary:
+    input: /fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.fa
+    output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.dict
+    log: /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/create_picard_index_dictionary.log
+    jobid: 0
+    resources: mem_mb=6225, disk_mb=6225, tmpdir=/tmp
+
+Activating conda environment: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/4c26b92aaa87ccc6914a3a4813ed0717
+INFO	2021-10-14 22:58:44	CreateSequenceDictionary	
+
+********** NOTE: Picard's command line syntax is changing.
+**********
+********** For more information, please see:
+********** https://github.com/broadinstitute/picard/wiki/Command-Line-Syntax-Transition-For-Users-(Pre-Transition)
+**********
+********** The command line looks like this in the new syntax:
+**********
+**********    CreateSequenceDictionary -R /fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.fa -O /fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.dict
+**********
+
+
+22:58:45.254 INFO  NativeLibraryLoader - Loading libgkl_compression.so from jar:file:/projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/4c26b92aaa87ccc6914a3a4813ed0717/share/picard-2.26.3-0/picard.jar!/com/intel/gkl/native/libgkl_compression.so
+[Thu Oct 14 22:58:45 AEDT 2021] CreateSequenceDictionary OUTPUT=/fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.dict REFERENCE=/fs03/pg32/zarul/WES_analysis/results/preprocessing/GRCh38_full_analysis_set_plus_decoy_hla.fa    TRUNCATE_NAMES_AT_WHITESPACE=true NUM_SEQUENCES=2147483647 VERBOSITY=INFO QUIET=false VALIDATION_STRINGENCY=STRICT COMPRESSION_LEVEL=5 MAX_RECORDS_IN_RAM=500000 CREATE_INDEX=false CREATE_MD5_FILE=false GA4GH_CLIENT_SECRETS=client_secrets.json USE_JDK_DEFLATER=false USE_JDK_INFLATER=false
+[Thu Oct 14 22:58:45 AEDT 2021] Executing as mzar0002@m3i025 on Linux 3.10.0-1160.11.1.el7.x86_64 amd64; OpenJDK 64-Bit Server VM 11.0.9.1-internal+0-adhoc..src; Deflater: Intel; Inflater: Intel; Provider GCS is not available; Picard version: 2.26.3
+[Thu Oct 14 22:59:09 AEDT 2021] picard.sam.CreateSequenceDictionary done. Elapsed time: 0.40 minutes.
+Runtime.totalMemory()=908337152
+[Thu Oct 14 22:59:09 2021]
+Finished job 0.
+1 of 1 steps (100%) done
