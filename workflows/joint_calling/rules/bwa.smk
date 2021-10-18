@@ -37,7 +37,7 @@ rule read_alignment:
 		ref_genome = rules.download_reference_genome.output,
 		ref_index = rules.build_index.output.bwa_index
 	output:
-		touch(os.path.join(pre_path, "read_alignment/{sample}/.DONE")
+		touch(os.path.join(pre_path, "read_alignment/{sample}/.DONE"))
 	conda:
 		"../envs/bwa.yaml"
 	threads:
@@ -54,17 +54,17 @@ rule read_alignment:
 		for i in $bn; do
 		 r1={input.dir}/"$i"_1.fq.gz
 		 r2={input.dir}/"$i"_2.fq.gz
-		
-		 illumina_flowcell=
-		 barcode=
-		 flowcell_lane=
-
-		 ID=
-		 PU=
+		 
+		 header=$(zcat $r1 | head -n 1 )
+		 id=$(echo $header | head -n 1 | cut -f 3-4 -d":" | sed "s/@//" | sed "s/:/_/g")
+		 pl="ILLUMINA"
+		 sm={wildcards.sample}
+		 lb=$(echo $id)
 
 		 bwa mem \
+		   -M \
 		   -t {threads} \
-		   -R "@RG\\tID:"$ID"\\tLB:PairedEnd\\tPL:ILLUMINA\\tPU:"$PU"\\tSM:{wildcards.sample}" \
+		   -R @RG\\tID:"$id"\\tLB:"$lb"\\tPL:"$pl"\\tSM:"$sm" \
 		   {input.ref_index}/bwa_index \
 		   $r1 $r2  2>> {log} | \
 		 samtools sort -@ {threads} -o {output}/"$i".bam 2>> {log}

@@ -2,3 +2,4 @@ results
 input_folder
 .snakemake
 db
+temp
