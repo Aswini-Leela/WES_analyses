@@ -41,36 +41,44 @@ rule read_alignment:
 	conda:
 		"../envs/bwa.yaml"
 	threads:
-		8
+		4
 	log:
 		os.path.join(pre_path, "log/read_alignment/{sample}.log")
 	shell:
 		"""
-		mkdir -p {output}
-		echo > {log}
+		outdir=$(dirname {output})
+		mkdir -p $outdir
 
-		bn=$(for i in $(find input_folder/datasets/raw_data/{wildcards.sample}/ | grep "gz") ; do basename $i | cut -d"_" -f1,2,3,4 ; done | sort -u)
-		
+		bn=$(for i in $(find {input.dir} | grep "gz") ; do basename $i | cut -d"_" -f1,2,3,4 ; done | sort -u)
+
 		for i in $bn; do
-		 r1={input.dir}/"$i"_1.fq.gz
-		 r2={input.dir}/"$i"_2.fq.gz
-		 
-		 header=$(zcat $r1 | head -n 1 )
-		 id=$(echo $header | head -n 1 | cut -f 3-4 -d":" | sed "s/@//" | sed "s/:/_/g")
-		 pl="ILLUMINA"
-		 sm={wildcards.sample}
-		 lb=$(echo $id)
+			echo $i >> {log}
+			r1={input.dir}/"$i"_1.fq.gz
+			r2={input.dir}/"$i"_2.fq.gz
 
-		 bwa mem \
-		   -M \
-		   -t {threads} \
-		   -R @RG\\tID:"$id"\\tLB:"$lb"\\tPL:"$pl"\\tSM:"$sm" \
-		   {input.ref_index}/bwa_index \
-		   $r1 $r2  2>> {log} | \
-		 samtools sort -@ {threads} -o {output}/"$i".bam 2>> {log}
-		 samtools index -@ {threads} {output}/"$i".bam
+			tmp_fastq="$outdir"/.temp_{wildcards.sample}.fastq
+			rm -rf $tmp_fastq 
 
-		 echo >> {log}
+			vsearch --fastx_subsample $r1 --fastqout $tmp_fastq --sample_pct 0.1 &>> {log}
+
+			id=$(cat $tmp_fastq | awk '(NR == 1)' | cut -f 3-4 -d":" | sed "s/@//" | sed "s/:/_/g")
+			lb={wildcards.sample}
+			pl="ILLUMINA"
+			sm={wildcards.sample}
+			
+			echo $id >> {log}
+			echo $lb >> {log}
+			echo $pl >> {log}
+			echo $sm >> {log}
+
+			bwa mem \
+				-M \
+				-t {threads} \
+				-R "@RG\\tID:""$id""\\tLB:""$lb""\\tPL:""$pl""\\tSM:""$sm" \
+				{input.ref_index}/bwa_index \
+				$r1 $r2  2>> {log} | \
+			samtools sort -@ {threads} -o $outdir/"$i".bam 2>> {log}
+			samtools index -@ {threads} $outdir/"$i".bam
 		done
 		"""
 
@@ -87,7 +95,8 @@ rule merge_bamfiles:
 	threads: 16
 	shell:
 		"""
-		samtools merge -@ {threads} -f -o {output} $(find {input} | grep "bam$") 2> {log}
+		indir=$(dirname {input})
+		samtools merge -@ {threads} -f -o {output} $(find $indir | grep "bam$") 2> {log}
 		"""
 	
 rule mark_duplicates:
