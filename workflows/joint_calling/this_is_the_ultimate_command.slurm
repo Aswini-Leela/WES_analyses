@@ -1,4 +1,4 @@
-snakemake -j 50 -k --use-conda \
+snakemake -j 5 -k --use-conda \
 	--cluster-config ../../config/cluster.yaml \
 	--conda-frontend mamba \
 	--use-singularity \
