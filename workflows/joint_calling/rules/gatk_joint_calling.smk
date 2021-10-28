@@ -79,8 +79,8 @@ rule gatk_variant_recalibrator_snp:
         recal = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.recal"),
         tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.tranches"),
         fig = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.plots.R")
-    conda:
-        "../envs/gatk.yaml"
+    container:
+        "docker://broadinstitute/gatk:4.1.3.0"
     log:
         os.path.join(out_path, "log/gatk_variant_recalibrator_snp/{group}.log")
     resources:
@@ -186,8 +186,8 @@ rule gatk_variant_recalibrator_indel:
         recal = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.recal"),
         tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.tranches"),
         fig = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.plots.R")
-    conda:
-        "../envs/gatk.yaml"
+    container:
+        "docker://broadinstitute/gatk:4.1.3.0"
     log:
         os.path.join(out_path, "log/gatk_variant_recalibrator_indel/{group}.log")
     params:
