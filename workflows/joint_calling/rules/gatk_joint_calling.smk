@@ -15,9 +15,9 @@ rule gatk_combine_gvcfs:
 		gvcfs=$(for i in {input.gvcfs} ; do echo "-V "$i ; done | tr "\\n" " ")
 
 		gatk CombineGVCFs \
-		        -R {input.ref} \
+	        -R {input.ref} \
 			$gvcfs \
-		        -O {output.vcf} \
+	        -O {output.vcf} \
 			-L {input.exon_bed} 2> {log}
 		"""
 
@@ -36,9 +36,9 @@ rule gatk_genotype_combined_gvcf:
 	shell:
 		"""
 		gatk GenotypeGVCFs \
-		        -R {input.ref} \
+		    -R {input.ref} \
 			-V {input.gvcf} \
-		        -O {output.vcf} \
+		    -O {output.vcf} \
 			-L {input.exon_bed} 2> {log}
 		"""
 			
@@ -59,7 +59,7 @@ rule gatk_selectvariants_snp:
 	shell:
 		"""
 		gatk SelectVariants \
-		        -R {input.ref} \
+		    -R {input.ref} \
 			-V {input.vcf} \
 			-O {output.vcf} \
 			-L {input.exon_bed} \
@@ -119,36 +119,38 @@ rule gatk_variant_recalibrator_snp:
 		"""
 
 rule gatk_applyVQSR_snp:
-	input:
-		ref = rules.download_reference_genome.output,
-		vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
-		exon_bed = config["exon_bed"],
-		recal = rules.gatk_variant_recalibrator_snp.output.recal,
-		tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file
-	output:
-		vcf = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz"),
-		idx = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz.tbi")
-	conda:
-		"../envs/gatk.yaml"
-	log:
-		os.path.join(out_path, "log/gatk_applyVQSR_snp/{group}.log")
-	params:
-		truth_sensitivity_filter_level = 99.7,
-		create_output_variant_index = "true",
-		mode = "SNP"
-	shell:
-		"""
-		gatk ApplyVQSR \
-			-R {input.ref} \
-			-V {input.vcf} \
-			-O {output.vcf} \
-			-L {input.exon_bed} \
-			--recal-file {input.recal} \
-			--tranches-file {input.tranch} \
-			--truth-sensitivity-filter-level {params.truth_sensitivity_filter_level} \
-			--create-output-variant-index {params.create_output_variant_index} \
-			-mode {params.mode}
-		"""
+    input:
+        ref = rules.download_reference_genome.output,
+        vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
+        exon_bed = config["exon_bed"],
+        recal = rules.gatk_variant_recalibrator_snp.output.recal,
+        tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file
+    output:
+        vcf = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz"),
+        idx = os.path.join(out_path, "gatk_VQSR_snp/{group}.vcf.gz.tbi")
+    conda:
+        "../envs/gatk.yaml"
+    log:
+        os.path.join(out_path, "log/gatk_applyVQSR_snp/{group}.log")
+    params:
+        truth_sensitivity_filter_level = 99.7,
+        create_output_variant_index = "true",
+        mode = "SNP"
+    shell:
+        """
+        gatk ApplyVQSR \
+            -R {input.ref} \
+            -V {input.vcf} \
+            -O {output.vcf} \
+            -L {input.exon_bed} \
+            --recal-file {input.recal} \
+            --tranches-file {input.tranch} \
+            --truth-sensitivity-filter-level {params.truth_sensitivity_filter_level} \
+            --create-output-variant-index {params.create_output_variant_index} \
+            -mode {params.mode} 2> {log}
+        """
+
+
 
 rule gatk_selectvariants_indel:
 	input:
@@ -167,11 +169,11 @@ rule gatk_selectvariants_indel:
 	shell:
 		"""
 		gatk SelectVariants \
-		        -R {input.ref} \
-				-V {input.vcf} \
-		        -O {output.vcf} \
-				-L {input.exon_bed} \
-				--select-type-to-include {params.select_type_to_include} 2> {log}
+	        -R {input.ref} \
+			-V {input.vcf} \
+	        -O {output.vcf} \
+			-L {input.exon_bed} \
+			--select-type-to-include {params.select_type_to_include} 2> {log}
 		"""
 
 rule gatk_variant_recalibrator_indel:
@@ -252,6 +254,5 @@ rule gatk_applyVQSR_indel:
 			--tranches-file {input.tranch} \
 			--truth-sensitivity-filter-level {params.truth_sensitivity_filter_level} \
 			--create-output-variant-index {params.create_output_variant_index} \
-			-mode {params.mode}
+			-mode {params.mode} 2> {log}
 		"""
-
