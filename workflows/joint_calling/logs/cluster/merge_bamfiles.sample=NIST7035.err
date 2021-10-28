@@ -4,7 +4,7 @@ Provided cores: 16
 Rules claiming more threads will be scaled down.
 Select jobs to execute...
 
-[Sun Oct 24 14:38:52 2021]
+[Wed Oct 27 11:44:04 2021]
 rule merge_bamfiles:
     input: /fs03/pg32/zarul/WES_analysis/results/preprocessing/read_alignment/NIST7035/.DONE
     output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam
@@ -15,27 +15,6 @@ rule merge_bamfiles:
     resources: mem_mb=1000, disk_mb=1000, tmpdir=/tmp
 
 Activating conda environment: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/409aa2be3945fcb4e384eff8b34680bf
-[Sun Oct 24 14:39:03 2021]
-Error in rule merge_bamfiles:
-    jobid: 0
-    output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam
-    log: /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/merge_bamfiles/NIST7035.log (check log file(s) for error message)
-    conda-env: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/409aa2be3945fcb4e384eff8b34680bf
-    shell:
-        
-		samtools merge -@ 16 -f -o /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7035.bam $(find /fs03/pg32/zarul/WES_analysis/results/preprocessing/read_alignment/NIST7035/.DONE | grep "bam$") 2> /fs03/pg32/zarul/WES_analysis/results/preprocessing/log/merge_bamfiles/NIST7035.log
-		
-        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
-
-Shutting down, this might take some time.
-Exiting because a job execution failed. Look above for error message
-Traceback (most recent call last):
-  File "/home/mzar0002/miniconda3/envs/snake/lib/python3.9/site-packages/snakemake/__init__.py", line 699, in snakemake
-    success = workflow.execute(
-  File "/home/mzar0002/miniconda3/envs/snake/lib/python3.9/site-packages/snakemake/workflow.py", line 1072, in execute
-    dag.cleanup_workdir()
-  File "/home/mzar0002/miniconda3/envs/snake/lib/python3.9/site-packages/snakemake/dag.py", line 245, in cleanup_workdir
-    os.removedirs(io_dir)
-  File "/home/mzar0002/miniconda3/envs/snake/lib/python3.9/os.py", line 243, in removedirs
-    rmdir(name)
-FileNotFoundError: [Errno 2] No such file or directory: '/fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles'
+[Wed Oct 27 11:45:51 2021]
+Finished job 0.
+1 of 1 steps (100%) done

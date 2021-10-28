@@ -1,10 +1,10 @@
 rule gatk_combine_gvcfs:
 	input:
-		gvcfs = lambda wildcards: expand(rules.gatk_haplotypecaller.output, sample = get_samples_given_group(wildcards.group)),
+		gvcfs = lambda wildcards: expand(rules.gatk_haplotypecaller.output.gvcf, sample = get_samples_given_group(wildcards.group)),
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = os.path.join(out_path, "gatk_combine/{group}.g.vcf.gz"),
+		gvcf = os.path.join(out_path, "gatk_combine/{group}.g.vcf.gz"),
 		idx = os.path.join(out_path, "gatk_combine/{group}.g.vcf.gz.tbi")
 	conda:
 		"../envs/gatk.yaml"
@@ -12,18 +12,18 @@ rule gatk_combine_gvcfs:
 		os.path.join(out_path, "log/gatk_combine_gvcfs/{group}.log")
 	shell:
 		"""
-		gvcfs=$(for i in {input.gvcfs} ; do echo "-V "$i ; done | tr "\n" " ")
+		gvcfs=$(for i in {input.gvcfs} ; do echo "-V "$i ; done | tr "\\n" " ")
 
-		gatk CombineGVCFs 
+		gatk CombineGVCFs \
 		        -R {input.ref} \
-				$gvcfs \
+			$gvcfs \
 		        -O {output.vcf} \
-				-L {input.exon_bed} 2> {log}
+			-L {input.exon_bed} 2> {log}
 		"""
 
 rule gatk_genotype_combined_gvcf:
 	input:
-		gvcf = rules.gatk_combine_gvcfs.output,
+		gvcf = rules.gatk_combine_gvcfs.output.gvcf,
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
@@ -37,14 +37,14 @@ rule gatk_genotype_combined_gvcf:
 		"""
 		gatk GenotypeGVCFs \
 		        -R {input.ref} \
-				-V {input.gvcf} \
+			-V {input.gvcf} \
 		        -O {output.vcf} \
-				-L {input.exon_bed} 2> {log}
+			-L {input.exon_bed} 2> {log}
 		"""
 			
 rule gatk_selectvariants_snp:
 	input:
-		vcf = rules.gatk_genotype_combined_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
@@ -60,16 +60,16 @@ rule gatk_selectvariants_snp:
 		"""
 		gatk SelectVariants \
 		        -R {input.ref} \
-				-V {input.vcf} \
-				-O {output.vcf} \
-				-L {input.exon_bed} \
-				--select-type-to-include {params.select_type_to_include} 2> {log}
+			-V {input.vcf} \
+			-O {output.vcf} \
+			-L {input.exon_bed} \
+			--select-type-to-include {params.select_type_to_include} 2> {log}
 		"""
 
 rule gatk_variant_recalibrator_snp:
 	input:
 		ref = rules.download_reference_genome.output,
-		vcf = rules.gatk_selectvariants_snp.output,
+		vcf = rules.gatk_selectvariants_snp.output.vcf,
 		exon_bed = config["exon_bed"],
 		resource1 = config["hapmap_resource"],
 		resource2 = config["omni_resource"],
@@ -78,6 +78,7 @@ rule gatk_variant_recalibrator_snp:
 	output:
 		recal = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.recal"),
 		tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}_snp.tranches")
+		fig = os.path.join(out_path, "gatk_variant_recalibrator_snp/{group}.plots.R")
 	conda:
 		"../envs/gatk.yaml"
 	log:
@@ -113,13 +114,14 @@ rule gatk_variant_recalibrator_snp:
 			$tranches \
 			$annots \
 			--mode {params.mode} \
+			--rscript-file {output.fig} \
 			--tranches-file {output.tranche_file} 2> {log}
 		"""
 
 rule gatk_applyVQSR_snp:
 	input:
 		ref = rules.download_reference_genome.output,
-		vcf = rules.gatk_genotype_combined_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
 		exon_bed = config["exon_bed"],
 		recal = rules.gatk_variant_recalibrator_snp.output.recal,
 		tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file
@@ -150,7 +152,7 @@ rule gatk_applyVQSR_snp:
 
 rule gatk_selectvariants_indel:
 	input:
-		vcf = rules.gatk_genotype_combined_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
 		ref = rules.download_reference_genome.output,
 		exon_bed = config["exon_bed"]
 	output:
@@ -175,14 +177,15 @@ rule gatk_selectvariants_indel:
 rule gatk_variant_recalibrator_indel:
 	input:
 		ref = rules.download_reference_genome.output,
-		vcf = rules.gatk_selectvariants_indel.output,
+		vcf = rules.gatk_selectvariants_indel.output.vcf,
 		exon_bed = config["exon_bed"],
 		resource1 = config["mills_resource"],
 		resource2 = config["axiompoly_resource"],
 		resource3 = config["dbsnp_resource"]
 	output:
 		recal = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.recal"),
-		tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.tranches")
+		tranche_file = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.tranches"),
+		fig = os.path.join(out_path, "gatk_variant_recalibrator_indel/{group}.plots.R")
 	conda:
 		"../envs/gatk.yaml"
 	log:
@@ -192,7 +195,7 @@ rule gatk_variant_recalibrator_indel:
 		tranches = " 100.0 99.95 99.9 99.8 99.6 99.5 99.4 99.3 99.0 98.0 97.0 90.0",
 		annots = " QD FS SOR MQ MQRankSum ReadPosRankSum",
 		mode = "INDEL",
-		max_attempts = 20,
+		max_attempts = 5,
 		resource1 = "mills,known=false,training=true,truth=true,prior=12",
 		resource2 = "axiomPoly,known=false,training=true,truth=false,prior=10",
 		resource3 = "dbsnp,known=true,training=false,truth=false,prior=2"
@@ -209,20 +212,21 @@ rule gatk_variant_recalibrator_indel:
 			-V {input.vcf} \
 			-O {output.recal} \
 			-L {input.exon_bed} \
-			$tranches \
-			$annots \
-			--mode {params.mode} \
 			--max-attempts {params.max_attempts} \
 			--resource:{params.resource1} {input.resource1} \
 			--resource:{params.resource2} {input.resource2} \
 			--resource:{params.resource3} {input.resource3} \
+			$tranches \
+			$annots \
+			--mode {params.mode} \
+			--rscript-file {output.fig} \
 			--tranches-file {output.tranche_file} 2> {log}
 		"""
 
 rule gatk_applyVQSR_indel:
 	input:
 		ref = rules.download_reference_genome.output,
-		vcf = rules.gatk_genotype_combined_gvcf.output,
+		vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
 		exon_bed = config["exon_bed"],
 		recal = rules.gatk_variant_recalibrator_indel.output.recal,
 		tranch = rules.gatk_variant_recalibrator_indel.output.tranche_file,

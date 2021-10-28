@@ -55,7 +55,7 @@ rule gatk_haplotypecaller:
 		dbsnp_ref = config["dbsnp_ref"],
 		exon_bed = config["exon_bed"]
 	output:
-		vcf = os.path.join(pre_path, "gatk_haplotypecaller/{sample}_variants.g.vcf.gz"),
+		gvcf = os.path.join(pre_path, "gatk_haplotypecaller/{sample}_variants.g.vcf.gz"),
 		idx = os.path.join(pre_path, "gatk_haplotypecaller/{sample}_variants.g.vcf.gz.tbi")
 	conda:
 		"../envs/gatk.yaml"
