@@ -255,3 +255,22 @@ rule gatk_applyVQSR_indel:
             --create-output-variant-index {params.create_output_variant_index} \
             -mode {params.mode} 2> {log}
         """
+
+rule merge_snp_indel_vcf:
+    input:
+        snp = rules.gatk_applyVQSR_snp.output.vcf,
+        indel = rules.gatk_applyVQSR_indel.output.vcf,
+    output:
+        vcf = os.path.join(out_path, "merged_vcf/{group}.vcf.gz"),
+        idx = os.path.join(out_path, "merged_vcf/{group}.vcf.gz.tbi"),
+    conda:
+        "../envs/bwa.yaml"
+    log:
+        os.path.join(pre_path, "log/merge_snp_indel_vcf/{group}.log")
+    shell:
+        """
+        picard MergeVcfs \
+            I={input.snp} \
+            I={input.indel} \
+            O={output.vcf} 2> {log}
+        """
