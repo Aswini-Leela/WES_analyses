@@ -17,7 +17,7 @@ rule gatk_combine_gvcfs:
         gatk CombineGVCFs \
             -R {input.ref} \
             $gvcfs \
-            -O {output.vcf} \
+            -O {output.gvcf} \
             -L {input.exon_bed} 2> {log}
         """
 
@@ -90,6 +90,7 @@ rule gatk_variant_recalibrator_snp:
         tranches = " 100.0 99.95 99.9 99.8 99.6 99.5 99.4 99.3 99.0 98.0 97.0 90.0",
         annots = " QD FS SOR MQRankSum ReadPosRankSum MQ",
         mode = "SNP",
+        max_gaussians = 4,
         max_attempts = 5,
         resource1 = "hapmap,known=false,training=true,truth=true,prior=15",
         resource2 = "omni,known=false,training=true,truth=false,prior=12",
@@ -113,6 +114,7 @@ rule gatk_variant_recalibrator_snp:
             $tranches \
             $annots \
             --mode {params.mode} \
+            --max-gaussians {params.max_gaussians} \
             --rscript-file {output.fig} \
             --tranches-file {output.tranche_file} 2> {log}
         """

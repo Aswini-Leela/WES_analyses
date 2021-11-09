@@ -4,7 +4,7 @@ Provided cores: 16
 Rules claiming more threads will be scaled down.
 Select jobs to execute...
 
-[Wed Oct 27 11:41:27 2021]
+[Wed Nov  3 21:04:18 2021]
 rule merge_bamfiles:
     input: /fs03/pg32/zarul/WES_analysis/results/preprocessing/read_alignment/NIST7086/.DONE
     output: /fs03/pg32/zarul/WES_analysis/results/preprocessing/merge_bamfiles/NIST7086.bam
@@ -15,6 +15,6 @@ rule merge_bamfiles:
     resources: mem_mb=1000, disk_mb=1000, tmpdir=/tmp
 
 Activating conda environment: /projects/pg32/WES_analyses/workflows/joint_calling/.snakemake/conda/409aa2be3945fcb4e384eff8b34680bf
-[Wed Oct 27 11:43:20 2021]
+[Wed Nov  3 21:06:04 2021]
 Finished job 0.
 1 of 1 steps (100%) done

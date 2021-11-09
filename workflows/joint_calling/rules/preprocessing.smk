@@ -73,7 +73,7 @@ rule gatk_haplotypecaller:
 		        -L {input.exon_bed} \
 		        -I {input.bam} \
 		        --dbsnp {input.dbsnp_ref} \
-		        -O {output.vcf} \
+		        -O {output.gvcf} \
 			$annotations \
 			-ERC {params.erc} 2> {log}
 		"""
