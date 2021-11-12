@@ -19,6 +19,8 @@ dbsnp_ref:
     /projects/pg32/WES_analyses/input_folder/gatk_bundle_db/dbsnp_138.hg38.vcf.gz 
 exon_bed:
     /projects/pg32/WES_analyses/input_folder/exome_regions/nexterarapidcapture_hg38.bed
+exon_bed_nochrX:
+    /projects/pg32/WES_analyses/input_folder/exome_regions/nexterarapidcapture_hg38_nochrX.bed
 hapmap_resource:
     /projects/pg32/WES_analyses/input_folder/gatk_bundle_db/hapmap_3.3.hg38.vcf.gz
 mills_resource:
