@@ -31,8 +31,8 @@ rule snpsift_concordance_NA12878:
         eval_vcf = rules.merge_snp_indel_vcf.output.vcf,
         eval_idx = rules.merge_snp_indel_vcf.output.idx
     output:
-        truth_vcf = os.path.join(out_path, "concordance_NA12878/snpsift/truth.vcf"),
-        eval_vcf = os.path.join(out_path, "concordance_NA12878/snpsift/eval.vcf"),
+        truth_vcf = os.path.join(out_path, "concordance_NA12878/snpsift/truth_{group}.vcf"),
+        eval_vcf = os.path.join(out_path, "concordance_NA12878/snpsift/eval_{group}.vcf"),
         summary = os.path.join(out_path, "concordance_NA12878/snpsift/{group}.tsv")
     conda:
         "../envs/snpsift.yaml"
