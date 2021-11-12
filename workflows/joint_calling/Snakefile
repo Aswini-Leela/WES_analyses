@@ -19,7 +19,8 @@ include: "rules/validate.smk"
 
 rule all:
     input:
-        expand(rules.concordance_NA12878.output, group = groups)
+        expand(rules.gatk_concordance_NA12878.output, group = groups),
+        expand(rules.snpsift_concordance_NA12878.output, group = groups)
 
 def get_samples_given_group(group):
     return metadata.loc[metadata["group"] == group, :].index.tolist()
