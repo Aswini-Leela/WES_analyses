@@ -24,8 +24,6 @@ rule gatk_concordance_NA12878:
 
 rule snpsift_concordance_NA12878:
     input:
-        ref = rules.download_reference_genome.output,
-        intervals = config["exon_bed"],
         truth_vcf = config["NA12878_validation_vcf"],
         truth_idx = config["NA12878_validation_vcf"] + ".tbi",
         eval_vcf = rules.merge_snp_indel_vcf.output.vcf,
