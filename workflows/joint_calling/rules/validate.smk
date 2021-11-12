@@ -46,4 +46,4 @@ rule snpsift_concordance_NA12878:
         SnpSift concordance \
             -v {output.truth_vcf} \
             {output.eval_vcf} > {output.summary} 2> {log}
-        """q
+        """
