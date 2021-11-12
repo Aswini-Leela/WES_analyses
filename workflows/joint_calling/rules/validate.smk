@@ -40,5 +40,5 @@ rule snpsift_concordance_NA12878:
         """
         SnpSift concordance \
             -v {input.truth_vcf} \
-            {input.eval_vcf} > {output}
+            {input.eval_vcf} > {output} 2> {log}
         """
