@@ -122,7 +122,7 @@ rule gatk_variant_recalibrator_snp:
 rule gatk_applyVQSR_snp:
     input:
         ref = rules.download_reference_genome.output,
-        vcf = rules.gatk_genotype_combined_gvcf.output.vcf,
+        vcf = rules.gatk_selectvariants_snp.output.vcf,
         exon_bed = config["exon_bed"],
         recal = rules.gatk_variant_recalibrator_snp.output.recal,
         tranch = rules.gatk_variant_recalibrator_snp.output.tranche_file

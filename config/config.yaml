@@ -20,7 +20,7 @@ dbsnp_ref:
 exon_bed:
     /projects/pg32/WES_analyses/input_folder/exome_regions/szemei.bed
 exon_bed_nochrX:
-    /projects/pg32/WES_analyses/input_folder/exome_regions/szemei_nochrXY.bed
+    /projects/pg32/WES_analyses/input_folder/exome_regions/finalv1.bed
 hapmap_resource:
     /projects/pg32/WES_analyses/input_folder/gatk_bundle_db/hapmap_3.3.hg38.vcf.gz
 mills_resource:

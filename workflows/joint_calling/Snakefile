@@ -19,7 +19,7 @@ include: "rules/validate.smk"
 
 rule all:
     input:
-        expand(rules.gatk_concordance_NA12878.output, group = groups)
+        expand(rules.gatk_concordance_NA12878.output.summary, group = groups)
 
 #        expand(rules.snpsift_concordance_NA12878.output.summary, group = groups)
 

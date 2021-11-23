@@ -7,7 +7,9 @@ rule gatk_concordance_NA12878:
         eval_vcf = rules.merge_snp_indel_vcf.output.vcf,
         eval_idx = rules.merge_snp_indel_vcf.output.idx
     output:
-        os.path.join(out_path, "concordance_NA12878/gatk/{group}.tsv")
+        summary = os.path.join(out_path, "concordance_NA12878/gatk/{group}.tsv"),
+        tpfn_vcf = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfn.vcf.gz"),
+        tpfp_vcf = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfp.vcf.gz"),
     conda:
         "../envs/gatk.yaml"
     log:
@@ -19,7 +21,10 @@ rule gatk_concordance_NA12878:
             -eval {input.eval_vcf} \
             --truth {input.truth_vcf} \
             --intervals {input.intervals} \
-            --summary {output} 2> {log}
+			--true-positives-and-false-negatives {output.tpfn_vcf} \
+			--true-positives-and-false-positives {output.tpfp_vcf} \
+			--verbosity DEBUG \
+            --summary {output.summary} 2> {log}
         """
 
 rule snpsift_concordance_NA12878:

@@ -5,4 +5,4 @@ db
 *temp*
 *tmp*
 *logs*
-
+logs/cluster
