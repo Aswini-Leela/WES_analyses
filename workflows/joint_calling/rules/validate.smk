@@ -8,12 +8,12 @@ rule gatk_concordance_NA12878:
         eval_idx = rules.merge_snp_indel_vcf.output.idx
     output:
         summary = os.path.join(out_path, "concordance_NA12878/gatk/{group}.tsv"),
-        tpfn_vcf = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfn.vcf.gz"),
-        tpfp_vcf = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfp.vcf.gz"),
+        tpfp = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfp.vcf.gz"),
+        tpfn = os.path.join(out_path, "concordance_NA12878/gatk/{group}_tpfn.vcf.gz")
     conda:
         "../envs/gatk.yaml"
     log:
-        os.path.join(out_path, "log/concordance_NA12878/gatk/{group}.log")
+        os.path.join(out_path, "log/concordance_NA12878/gatk/{group}_concordance.log")
     shell:
         """
         gatk Concordance \
@@ -21,10 +21,29 @@ rule gatk_concordance_NA12878:
             -eval {input.eval_vcf} \
             --truth {input.truth_vcf} \
             --intervals {input.intervals} \
-			--true-positives-and-false-negatives {output.tpfn_vcf} \
-			--true-positives-and-false-positives {output.tpfp_vcf} \
-			--verbosity DEBUG \
-            --summary {output.summary} 2> {log}
+            --summary {output.summary} \
+            -tpfp {output.tpfp} \
+            -tpfn {output.tpfn} 2> {log}
+        """
+        
+rule summarize_concordance_output_to_bed:
+    input:
+        tpfp = rules.gatk_concordance_NA12878.output.tpfp,
+        tpfn = rules.gatk_concordance_NA12878.output.tpfn,
+    output:
+        fp = os.path.join(out_path, "concordance_NA12878/gatk/{group}_false_positive.bed"),
+        fn = os.path.join(out_path, "concordance_NA12878/gatk/{group}_false_negative.bed")
+    conda:
+        "../envs/bwa.yaml"
+    log:
+        os.path.join(out_path, "log/concordance_NA12878/gatk/{group}_bed_summary.log")
+    shell:
+        """
+        bcftools query -f "%CHROM\t%POS\t%INFO/STATUS\n" {input.tpfp} | \
+         awk '{{OFS = "\t"}}{{if ($3 != "TP") print $1,$2-1,$2,$3}}' > {output.fp}
+        
+        bcftools query -f "%CHROM\t%POS\t%INFO/STATUS\n" {input.tpfn} | \
+         awk '{{OFS = "\t"}}{{if ($3 != "TP") print $1,$2-1,$2,$3}}' > {output.fn}
         """
 
 rule snpsift_concordance_NA12878:
@@ -50,3 +69,4 @@ rule snpsift_concordance_NA12878:
             -v {output.truth_vcf} \
             {output.eval_vcf} > {output.summary} 2> {log}
         """
+
