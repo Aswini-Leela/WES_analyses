@@ -1,6 +1,6 @@
 name: bbmap 
 channels:
-        - bioconda
-        - conda-forge
+    - bioconda
+    - conda-forge
 dependencies:
-        - bbmap
+    - bbmap
